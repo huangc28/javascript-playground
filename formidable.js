@@ -1,38 +1,28 @@
-var http = require('http'), 
-    formidable = require('formidable'),
-    sys = require('sys'); 
+var formidable = require('formidable'),
+    http = require('http'),
+    util = require('util');
 
-http.createServer(function(req, res){
-    if(req.url == '/upload' && req.method.toLowerCase() == 'post')
-    {
-        // parse a file upload
-        var form = new formidable.IncomingForm();
-        form.parse(req, function(error, fields, files){
-            res.writeHead(200, {'content-type': 'text/plain'})
-            res.write('received upload:\n\n');
-            res.end(sys.inspect({'fields': fields, 'files': files}));
-        });
-        return ;
-    }
+http.createServer(function(req, res) {
+  if (req.url == '/upload' && req.method.toLowerCase() == 'post') {
+    // parse a file upload
+    var form = new formidable.IncomingForm();
 
-    res.writeHead(200, {'content-type': 'text/html'});
-    res.end(
-        '<form action="/upload" enctype="multipart/form-data" '+
-        'method="post">'+
-        '<input type="text" name="title"><br>'+
-        '<input type="file" name="upload" multiple="multiple"><br>'+
-        '<input type="submit" value="Upload">'+
-        '</form>'
-    );
-}).listen(8888);
+    form.parse(req, function(err, fields, files) {
+      res.writeHead(200, {'content-type': 'text/plain'});
+      res.write('received upload:\n\n');
+      res.end(util.inspect({fields: fields, files: files}));
+    });
 
-/**
- * Javascript version of "die"
- * 
- * @param string message
- */
-function die(message){
-    process.exit(1);
-    console.error(message);
-};
+    return;
+  }
 
+  // show a file upload form
+  res.writeHead(200, {'content-type': 'text/html'});
+  res.end(
+    '<form action="/upload" enctype="multipart/form-data" method="post">'+
+    '<input type="text" name="title"><br>'+
+    '<input type="file" name="upload" multiple="multiple"><br>'+
+    '<input type="submit" value="Upload">'+
+    '</form>'
+  );
+}).listen(8080);

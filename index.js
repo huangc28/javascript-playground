@@ -8,6 +8,7 @@ var handle = {};
 handle['/']       = requestHandlers.start;
 handle['/start']  = requestHandlers.start;
 handle['/upload'] = requestHandlers.upload;
+handle['/show']   = requestHandlers.show;
 
 // console.log(router.start);
 server.start(router.start, handle);
